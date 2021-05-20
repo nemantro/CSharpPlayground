@@ -17,4 +17,20 @@ namespace CSharpPlayground.MessagePack.Model
         [IgnoreMember]
         public string FullName { get { return FirstName + LastName; } }
     }
+
+    [MessagePackObject]
+    public class ExtendedIndexKeyClass
+    {
+        [Key(0)]
+        public int Age { get; set; }
+
+        [Key(1)]
+        public string FirstName { get; set; }
+
+        [Key(2)]
+        public string LastName { get; set; }
+
+        [Key(3)]
+        public int NewIntger {get; set;}
+    }
 }
