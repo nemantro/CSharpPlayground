@@ -40,11 +40,16 @@ namespace CSharpPlayground.MessagePack
             var extendedIndexKeyJson = LZ4SerializeAndDeserialize(extendedIndexKeyObject);
             Console.WriteLine($"{nameof(extendedIndexKeyJson)} : {extendedIndexKeyJson}");
 
-            SerializeAndDeserializeDifferent();
+            SerializeAndDeserializeExtended();
 
-            SerializeLZ4AndDeserializeDifferent();
+            SerializeLZ4AndDeserializeExtended();
 
-            SerializeLZ4AndDeserializeDifferent_inverted();
+            SerializeExtendedLZ4AndDeserialize();
+
+            //won't work
+            //SerializeLZ4AndDeserializeDifferent();
+
+            SerializeLZ4AndDeserializeDifferentWithSameKeys();
         }
 
         private static string SerializeAndDeserialize<T>(T input)
@@ -69,7 +74,7 @@ namespace CSharpPlayground.MessagePack
             return json;
         }        
 
-        private static void SerializeAndDeserializeDifferent()
+        private static void SerializeAndDeserializeExtended()
         {
             var input = new IndexKeyClass
             {
@@ -82,7 +87,7 @@ namespace CSharpPlayground.MessagePack
             var deserialized = MessagePackSerializer.Deserialize<ExtendedIndexKeyClass>(bytes);
         }
 
-        private static void SerializeLZ4AndDeserializeDifferent()
+        private static void SerializeLZ4AndDeserializeExtended()
         {
             var input = new IndexKeyClass
             {
@@ -97,7 +102,7 @@ namespace CSharpPlayground.MessagePack
             var deserialized = MessagePackSerializer.Deserialize<ExtendedIndexKeyClass>(bytes, lz4Options);
         }
 
-        private static void SerializeLZ4AndDeserializeDifferent_inverted()
+        private static void SerializeExtendedLZ4AndDeserialize()
         {
             var input = new ExtendedIndexKeyClass
             {
@@ -111,6 +116,38 @@ namespace CSharpPlayground.MessagePack
 
             var bytes = MessagePackSerializer.Serialize(input, lz4Options);
             var deserialized = MessagePackSerializer.Deserialize<IndexKeyClass>(bytes, lz4Options);
+        }
+
+        private static void SerializeLZ4AndDeserializeDifferent()
+        {
+            var input = new ExtendedIndexKeyClass
+            {
+                Age = 99,
+                FirstName = "first",
+                LastName = "last",
+                NewIntger = 1
+            };
+
+            var lz4Options = MessagePackSerializerOptions.Standard.WithCompression(MessagePackCompression.Lz4BlockArray);            
+
+            var bytes = MessagePackSerializer.Serialize(input, lz4Options);
+            var deserialized = MessagePackSerializer.Deserialize<DifferentIndexKeyClass>(bytes, lz4Options);
+        }
+
+        private static void SerializeLZ4AndDeserializeDifferentWithSameKeys()
+        {
+            var input = new ExtendedIndexKeyClass
+            {
+                Age = 99,
+                FirstName = "first",
+                LastName = "last",
+                NewIntger = 1
+            };
+
+            var lz4Options = MessagePackSerializerOptions.Standard.WithCompression(MessagePackCompression.Lz4BlockArray);            
+
+            var bytes = MessagePackSerializer.Serialize(input, lz4Options);
+            var deserialized = MessagePackSerializer.Deserialize<SimilarIndexKeyClass>(bytes, lz4Options);
         }
     }
 }

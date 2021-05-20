@@ -33,4 +33,30 @@ namespace CSharpPlayground.MessagePack.Model
         [Key(3)]
         public int NewIntger {get; set;}
     }
+
+    [MessagePackObject]
+    public class DifferentIndexKeyClass
+    {
+        [Key(0)]
+        public int DIfferentAge { get; set; }
+
+        [Key(1)]
+        public string DifferentFirstName { get; set; }
+
+        [Key(2)]
+        public double NewDoubleValue { get; set; }
+    }
+
+    [MessagePackObject]
+    public class SimilarIndexKeyClass
+    {
+        [Key(0)]
+        public int DIfferentAge { get; set; }
+
+        [Key(1)]
+        public string DifferentFirstName { get; set; }
+
+        [Key(2)]
+        public string DifferentLastName { get; set; }
+    }
 }
